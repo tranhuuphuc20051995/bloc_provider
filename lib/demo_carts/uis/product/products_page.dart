@@ -1,5 +1,6 @@
 import 'package:bloc_provider/bloc_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/demo_carts/blocs/cart_bloc.dart';
 import 'package:flutterapp/demo_carts/blocs/product_bloc.dart';
 import 'package:flutterapp/demo_carts/models/product.dart';
 
@@ -19,10 +20,12 @@ class ProductsPage extends StatefulWidget {
 
 class _ProductsPageState extends State<ProductsPage> with RouteAware {
   ProductBloc productBloc;
+  CartBloc cartBloc;
 
   @override
   void initState() {
     productBloc = BlocProvider.of<ProductBloc>(context);
+    cartBloc = BlocProvider.of<CartBloc>(context);
     super.initState();
   }
 
@@ -50,6 +53,7 @@ class _ProductsPageState extends State<ProductsPage> with RouteAware {
                 ),
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
+                  final product = snapshot.data[index];
                   return GridTile(
                     child: Container(
                       decoration: BoxDecoration(
@@ -65,7 +69,7 @@ class _ProductsPageState extends State<ProductsPage> with RouteAware {
                       child: Row(
                         children: <Widget>[
                           Image.network(
-                            snapshot.data[index].image,
+                            product.image,
                             width: 50,
                             height: 50,
                           ),
@@ -74,25 +78,35 @@ class _ProductsPageState extends State<ProductsPage> with RouteAware {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  snapshot.data[index].name,
+                                  product.name,
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
                                 ),
                                 SizedBox(
                                   height: 10,
                                 ),
                                 Text(
-                                  "\$${snapshot.data[index].price}",
+                                  "\$${product.price}",
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
                                 ),
                               ],
                             ),
                           ),
                           InkWell(
-                            onTap: () {},
-                            child: Text(
-                              'Add',
+                            onTap: () {
+                              print('${cartBloc.itemCount.value}');
+                              cartBloc.addProductToCart(product);
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              width: 50,
+                              height: 40,
+                              child: Text(
+                                'Add',
+                              ),
                             ),
                           )
                         ],
@@ -102,7 +116,14 @@ class _ProductsPageState extends State<ProductsPage> with RouteAware {
                 },
               );
             } else if (!snapshot.hasData) {
-              return CircularProgressIndicator();
+              return Center(
+                child: Column(
+                  children: <Widget>[
+                    CircularProgressIndicator(),
+                    Text('Loading...'),
+                  ],
+                ),
+              );
             }
           },
         ),
@@ -127,6 +148,7 @@ class _ProductsPageState extends State<ProductsPage> with RouteAware {
 class CartWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final cartBloc = BlocProvider.of<CartBloc>(context);
     return InkWell(
       onTap: () {
         Navigator.pushNamed(context, "/cart");
@@ -159,14 +181,19 @@ class CartWidget extends StatelessWidget {
                   color: Colors.redAccent,
                   shape: BoxShape.circle,
                 ),
-                child: Text(
-                  '0',
-                  softWrap: true,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 9,
-                  ),
+                child: StreamBuilder<int>(
+                  stream: cartBloc.itemCount,
+                  builder: (context, snapshot) {
+                    return Text(
+                      snapshot.hasData ? '${cartBloc.itemCount.value}' : '0',
+                      softWrap: true,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 9,
+                      ),
+                    );
+                  },
                 ),
               ),
             ),

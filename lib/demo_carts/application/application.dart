@@ -1,4 +1,6 @@
+import 'package:bloc_provider/bloc_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/demo_carts/blocs/cart_bloc.dart';
 import 'package:flutterapp/demo_carts/uis/cart/my_cart_page.dart';
 import 'package:flutterapp/demo_carts/uis/product/products_page.dart';
 
@@ -18,9 +20,11 @@ class ProductBlocProviderApp extends StatelessWidget {
         navigatorObservers: [routeObserver],
         initialRoute: '/',
         routes: {
-          '/': (context) => ProductsPage.newInstance(),
+          '/': (context) => BlocProvider<CartBloc>(
+                creator: (_context, _bag) => CartBloc(),
+                child: ProductsPage.newInstance(),
+              ),
           '/cart': (context) => CartPage(),
-        }
-    );
+        });
   }
 }
