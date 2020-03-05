@@ -19,17 +19,20 @@ class _CartPageState extends State<CartPage> with RouteAware{
           ),
           centerTitle: true,
         ),
-        body: ListView.builder(
-          itemCount: list.length,
-          itemBuilder: (context, index) {
-            return Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.all(5),
-              color: Colors.deepPurple,
-              child: Text(list[index]),
-            );
-          },
-        ),
+        body: Text(
+          'Cart',
+        )
+//        ListView.builder(
+//          itemCount: list.length,
+//          itemBuilder: (context, index) {
+//            return Container(
+//              alignment: Alignment.center,
+//              margin: EdgeInsets.all(5),
+//              color: Colors.deepPurple,
+//              child: Text(list[index]),
+//            );
+//          },
+//        ),
       ),
     );
   }
