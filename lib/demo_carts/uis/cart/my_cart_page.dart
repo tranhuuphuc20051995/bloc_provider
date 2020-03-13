@@ -1,21 +1,27 @@
 import 'package:bloc_provider/bloc_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/demo_carts/blocs/cart_bloc.dart';
+import 'package:flutterapp/demo_carts/models/coin.dart';
 import 'package:flutterapp/demo_carts/models/product.dart';
+import 'package:flutterapp/demo_carts/widgets/coin_widget.dart';
 
 import '../../../main.dart';
 
 class CartPage extends StatefulWidget {
+  CartPage();
+
   @override
   _CartPageState createState() => _CartPageState();
 }
 
 class _CartPageState extends State<CartPage> with RouteAware {
   CartBloc cartBloc;
+  Coin coinModel;
 
   @override
   void initState() {
     cartBloc = BlocProvider.of(context);
+    coinModel = Coin.of(context);
     super.initState();
   }
 
@@ -28,6 +34,19 @@ class _CartPageState extends State<CartPage> with RouteAware {
             'Cart',
           ),
           centerTitle: true,
+          actions: <Widget>[
+            CoinWidget(),
+            FlatButton(
+              child: Text(
+                'Payment',
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                print('Payment click');
+                coinModel.payment(10);
+              },
+            )
+          ],
         ),
         body: StreamBuilder<List<Product>>(
           stream: cartBloc.cartStream,

@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutterapp/demo_carts/blocs/cart_bloc.dart';
 import 'package:flutterapp/demo_carts/blocs/product_bloc.dart';
 import 'package:flutterapp/demo_carts/models/product.dart';
+import 'package:flutterapp/demo_carts/widgets/coin_widget.dart';
 
 import '../../../main.dart';
 
 class ProductsPage extends StatefulWidget {
+  ProductsPage();
+
   static Widget newInstance() {
     return BlocProvider<ProductBloc>(
       creator: (_context, _bag) => ProductBloc(),
@@ -39,6 +42,7 @@ class _ProductsPageState extends State<ProductsPage> with RouteAware {
           ),
           centerTitle: true,
           actions: <Widget>[
+            CoinWidget(),
             CartWidget(),
           ],
         ),
