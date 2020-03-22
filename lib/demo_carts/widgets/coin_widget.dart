@@ -8,8 +8,8 @@ class CoinWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(8),
       child: Center(
-        child: new ScopedModelDescendant<Coin>(
-          builder: (context, child, model) => new Text('${model.money}'),
+        child: ScopedModelDescendant<Coin>(
+          builder: (context, child, model) => Text('${model.money}'),
         ),
       ),
     );

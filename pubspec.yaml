@@ -26,6 +26,8 @@ dependencies:
   bloc_provider: ^0.7.0
   rxdart: ^0.23.1
   scoped_model: ^1.0.1
+  dio: ^3.0.9
+  dio_http_cache: ^0.2.6
 
 dev_dependencies:
   flutter_test:
